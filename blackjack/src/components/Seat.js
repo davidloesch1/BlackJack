@@ -1,21 +1,25 @@
 import React, { Component } from 'react'
+import Card from './Card'
 import "./Seat.css"
 
-export class Seat extends Component {
-    constructor(props) {
-        super(props) 
-        this.state={
-            card1: this.props.data
-        }
+function Seat(props) {
+    console.log(props.seat)
+    let cards
+    if(props.seat.hand.length > 0){
+        cards = props.seat.hand
+        cards = cards.map(el => {
+        return <Card img={el.image} />
+        }) 
     }
-    render() {
-        console.log(this.props.data)
-        return (
-            <div className="seat-container">
-                <h3>Seat</h3>
-            </div>
-        )
-    }
+
+    
+    return(
+        <>
+            <h1>{props.seat.seat}</h1>
+            { cards }
+        </>
+    )
 }
+
 
 export default Seat

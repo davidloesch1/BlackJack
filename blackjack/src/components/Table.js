@@ -153,12 +153,21 @@ class Table extends Component {
   }
   render() {
     let dealer = this.state.table.slice(0);
+    let seats = dealer
+    console.log(seats)
     dealer = dealer.pop();
+    seats = seats.map(el => {
+        if(el.enabled === true) {
+            return <Seat seat={el} />
+        }
+    })
+    console.log(seats)
+
     return (
       <>
         <h1>Table</h1>
         <Dealer dealer={dealer} />
-        {/* { seats } */}
+        { seats }
         <button onClick={() => this.draw()}>Deal</button>
       </>
     );
