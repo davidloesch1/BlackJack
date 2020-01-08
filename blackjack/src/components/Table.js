@@ -19,7 +19,7 @@ class Table extends Component {
         },
         {
           seat: "Seat 2",
-          enabled: false,
+          enabled: true,
           hand: [],
           total: 0,
           bet: 0,
@@ -75,7 +75,7 @@ class Table extends Component {
         }
       ],
       account: props.account,
-      deck_id: "3il18jm01pqg",
+      deck_id: "qgjl7i4n3sky",
       cardsInPlay: [],
       deal: [],
       playerNum: 0,
@@ -83,8 +83,10 @@ class Table extends Component {
       remaining: 0,
       shuffled: null
     };
-    this.draw = this.draw.bind(this);
-    this.deal = this.deal.bind(this);
+    this.draw = this.draw.bind(this)
+    this.deal = this.deal.bind(this)
+    this.hit = this.hit.bind(this)
+    this.changeAceValue = this.changeAceValue.bind(this)
   }
   componentDidMount() {
     let i = 0;
@@ -103,16 +105,6 @@ class Table extends Component {
       this.deal();
     }
   }
-//   componentDidUpdate(prevProps) {
-//     if(this.state.table !== prevProps.table){
-//         let table = this.state.table.slice(0)
-
-//     } else if (this.state.deal.length > 0) {
-//         this.deal();
-//     }
-
-//   }
-
   deal() {
     let deal = this.state.deal.slice(0);
     let table = this.state.table.slice(0);
@@ -138,7 +130,21 @@ class Table extends Component {
     fetch(url)
       .then(res => res.json())
       .then(res => {
-        // console.log(res)
+          console.log(res)
+          res.cards.forEach(el => {
+              if(el.value === "JACK") {
+                  el.value = "10"
+              }else if(el.value === "QUEEN") {
+                  el.value = "10"
+              }else if(el.value === "KING") {
+                el.value = "10"
+              }else if(el.value === "ACE") {
+                el.value = "11"
+              }
+          })
+          return res
+      })
+      .then(res => {
         this.setState(state => {
           let deal = res.cards;
           let remaining = res.remaining;
@@ -151,17 +157,55 @@ class Table extends Component {
         });
       });
   }
+
+
+  hit(e){
+    let url =
+    "https://deckofcardsapi.com/api/deck/" +
+    this.state.deck_id +
+    "/draw/?count=1"
+    console.log(e)
+    let index = this.state.table.findIndex(x => x.seat === e)
+    let array = this.state.table.slice(0)
+    fetch(url)
+    .then(res=> res.json())
+    .then(res => {
+        console.log(res)
+        res.cards.forEach(el => {
+            if(el.value === "JACK") {
+                el.value = "10"
+            }else if(el.value === "QUEEN") {
+                el.value = "10"
+            }else if(el.value === "KING") {
+              el.value = "10"
+            }else if(el.value === "ACE") {
+              el.value = "11"
+            }
+        })
+        return res
+    })
+    .then(res=> {
+        this.setState(state => {
+            let table = array[index].hand.push(res.cards[0])
+            return table
+        })
+        
+    })
+    
+  }
+
+  changeAceValue(e){
+    console.log(e)
+}
   render() {
     let dealer = this.state.table.slice(0);
     let seats = dealer
-    console.log(seats)
     dealer = dealer.pop();
-    seats = seats.map(el => {
+    seats = seats.map(el  => {
         if(el.enabled === true) {
-            return <Seat seat={el} />
+            return <Seat seat={el} hit={this.hit} change={this.changeAceValue}/>
         }
     })
-    console.log(seats)
 
     return (
       <>
@@ -173,75 +217,5 @@ class Table extends Component {
     );
   }
 }
-// }
-// class Table extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       url: "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6",
-//       dealer: {
-//         seat: "dealer",
-//         enabled: true,
-//         hand: [],
-//         total: 0,
-//         bet: 0,
-//         bust: false
-//       },
-//       seats: {
-//         seat: "Seat 1",
-//         enabled: true,
-//         hand: [],
-//         total: 0,
-//         bet: 0,
-//         bust: false
-//       },
-//       account: props.account,
-//       deck_id: "hdcsdfmmf0o6"
-//     };
-//   }
-
-//   dealerDraw() {
-//     let url =
-//       "https://deckofcardsapi.com/api/deck/" +
-//       this.state.deck_id +
-//       "/draw/?count=2";
-//       fetch(url)
-//         .then(res => res.json())
-//         .then(res => {
-//             console.log(res)
-//             let dealer = this.state.dealer
-//             dealer.hand = res.cards
-//             this.setState({
-//                 dealer: dealer
-//             })
-//         })
-//   }
-//   seatDraw() {
-//     let url =
-//       "https://deckofcardsapi.com/api/deck/" +
-//       this.state.deck_id +
-//       "/draw/?count=2";
-//       fetch(url)
-//         .then(res => res.json())
-//         .then(res => {
-//             console.log(res)
-//             let seat = this.state.seats
-//             seat.hand = res.cards
-//             this.setState({
-//                 seats: seat
-//             })
-//         })
-//   }
-//   render() {
-//     return (
-//         <>
-//         <button onClick={() => this.dealerDraw()}>Deal</button>
-//         <button onClick={() => this.seatDraw()}>Deal</button>
-
-
-//         </>
-
-//   )}
-// }
 
 export default Table
