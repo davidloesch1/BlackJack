@@ -9,13 +9,62 @@ class Table extends Component {
     this.state = {
       url: "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6",
       table: [
-        { seat: 1, enabled: true, hand: [], total: 0, bet: 0, bust: false },
-        { seat: 2, enabled: false, hand: [], total: 0, bet: 0, bust: false },
-        { seat: 3, enabled: false, hand: [], total: 0, bet: 0, bust: false },
-        { seat: 4, enabled: true, hand: [], total: 0, bet: 0, bust: false },
-        { seat: 5, enabled: false, hand: [], total: 0, bet: 0, bust: false },
-        { seat: 6, enabled: false, hand: [], total: 0, bet: 0, bust: false },
-        { seat: 7, enabled: false, hand: [], total: 0, bet: 0, bust: false },
+        {
+          seat: "Seat 1",
+          enabled: true,
+          hand: [],
+          total: 0,
+          bet: 0,
+          bust: false
+        },
+        {
+          seat: "Seat 2",
+          enabled: false,
+          hand: [],
+          total: 0,
+          bet: 0,
+          bust: false
+        },
+        {
+          seat: "Seat 3",
+          enabled: false,
+          hand: [],
+          total: 0,
+          bet: 0,
+          bust: false
+        },
+        {
+          seat: "Seat 4",
+          enabled: true,
+          hand: [],
+          total: 0,
+          bet: 0,
+          bust: false
+        },
+        {
+          seat: "Seat 5",
+          enabled: false,
+          hand: [],
+          total: 0,
+          bet: 0,
+          bust: false
+        },
+        {
+          seat: "Seat 6",
+          enabled: false,
+          hand: [],
+          total: 0,
+          bet: 0,
+          bust: false
+        },
+        {
+          seat: "Seat 7",
+          enabled: false,
+          hand: [],
+          total: 0,
+          bet: 0,
+          bust: false
+        },
         {
           seat: "dealer",
           enabled: true,
@@ -26,7 +75,7 @@ class Table extends Component {
         }
       ],
       account: props.account,
-      deck_id: "iubvpk54vb1x",
+      deck_id: "3il18jm01pqg",
       cardsInPlay: [],
       deal: [],
       playerNum: 0,
@@ -36,7 +85,6 @@ class Table extends Component {
     };
     this.draw = this.draw.bind(this);
     this.deal = this.deal.bind(this);
-    // this.componentDidMount = this.componentDidMount.bind(this);
   }
   componentDidMount() {
     let i = 0;
@@ -49,74 +97,142 @@ class Table extends Component {
       playerNum: i
     });
   }
-//   deal() {
-//     let newDeal = this.state.deal.slice(0)
-//     let newTable = this.state.table.slice(0)
-//       let i = 0
-//       let mod = i % 8
-//       while (newDeal.length > 0) {
-//         if (newTable[mod].enabled === true) {
-//           newTable[mod].hand.push(newDeal.shift());
-//           // newTable[mod].hand.push(newDeal.shift());
-//         }
-//         console.log(mod)
-//         i++;
-//       }
-//   }
-//   draw() {
-//     //this api draws the amount of cards needed to deal the hand.
-//     let url =
-//       "https://deckofcardsapi.com/api/deck/" +
-//       this.state.deck_id +
-//       "/draw/?count=" +
-//       this.state.playerNum;
-//     fetch(url)
-//       .then(res => res.json())
-//       .then(res => {
-//         let newDeal = res.cards
-//         this.setState(
-//           {
-//             deal: newDeal,
-//           }
-//         );
-//       });
+
+  componentDidUpdate() {
+    if (this.state.deal.length > 0) {
+      this.deal();
+    }
+  }
+//   componentDidUpdate(prevProps) {
+//     if(this.state.table !== prevProps.table){
+//         let table = this.state.table.slice(0)
+
+//     } else if (this.state.deal.length > 0) {
+//         this.deal();
+//     }
+
 //   }
 
   deal() {
-
+    let deal = this.state.deal.slice(0);
+    let table = this.state.table.slice(0);
+    while (deal.length > 0) {
+      table.forEach(el => {
+        if (el.enabled === true) {
+          let newDeal = deal.splice(0, 2);
+          el.hand = newDeal;
+        }
+      });
+    }
+    this.setState({
+      deal: deal
+    });
   }
   draw() {
-      let numCards = this.state.playerNum * 2
-      let url = "https://deckofcardsapi.com/api/deck/" + this.state.deck_id + "/draw/?count=" + numCards
-      fetch(url)
-        .then(res => res.json())
-        .then(res => {
-            this.setState((state) => {
-                let deal = res.cards
-                let remaining = res.remaining
-                console.log(state.cardsInPlay)
-                let cardsInPlay = state.cardsInPlay.concat(res.cards)
-                return {
-                    deal,
-                    remaining,
-                    cardsInPlay
-                }
-                // cardsInPlay: newCardsInPlay,
-                // deal: res.cards,
-                // remaining: res.remaining
-            })
-        })
+    let numCards = this.state.playerNum * 2;
+    let url =
+      "https://deckofcardsapi.com/api/deck/" +
+      this.state.deck_id +
+      "/draw/?count=" +
+      numCards;
+    fetch(url)
+      .then(res => res.json())
+      .then(res => {
+        // console.log(res)
+        this.setState(state => {
+          let deal = res.cards;
+          let remaining = res.remaining;
+          let cardsInPlay = state.cardsInPlay.concat(res.cards);
+          return {
+            deal,
+            remaining,
+            cardsInPlay
+          };
+        });
+      });
   }
   render() {
+    let dealer = this.state.table.slice(0);
+    dealer = dealer.pop();
     return (
       <>
         <h1>Table</h1>
-        <Dealer />
-        <Seat seat={this.state.seats} />
+        <Dealer dealer={dealer} />
+        {/* { seats } */}
         <button onClick={() => this.draw()}>Deal</button>
       </>
     );
   }
 }
+// }
+// class Table extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       url: "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6",
+//       dealer: {
+//         seat: "dealer",
+//         enabled: true,
+//         hand: [],
+//         total: 0,
+//         bet: 0,
+//         bust: false
+//       },
+//       seats: {
+//         seat: "Seat 1",
+//         enabled: true,
+//         hand: [],
+//         total: 0,
+//         bet: 0,
+//         bust: false
+//       },
+//       account: props.account,
+//       deck_id: "hdcsdfmmf0o6"
+//     };
+//   }
 
-export default Table;
+//   dealerDraw() {
+//     let url =
+//       "https://deckofcardsapi.com/api/deck/" +
+//       this.state.deck_id +
+//       "/draw/?count=2";
+//       fetch(url)
+//         .then(res => res.json())
+//         .then(res => {
+//             console.log(res)
+//             let dealer = this.state.dealer
+//             dealer.hand = res.cards
+//             this.setState({
+//                 dealer: dealer
+//             })
+//         })
+//   }
+//   seatDraw() {
+//     let url =
+//       "https://deckofcardsapi.com/api/deck/" +
+//       this.state.deck_id +
+//       "/draw/?count=2";
+//       fetch(url)
+//         .then(res => res.json())
+//         .then(res => {
+//             console.log(res)
+//             let seat = this.state.seats
+//             seat.hand = res.cards
+//             this.setState({
+//                 seats: seat
+//             })
+//         })
+//   }
+//   render() {
+//     return (
+//         <>
+//         <button onClick={() => this.dealerDraw()}>Deal</button>
+//         <button onClick={() => this.seatDraw()}>Deal</button>
+
+
+//         </>
+
+//   )}
+// }
+
+export default Table
