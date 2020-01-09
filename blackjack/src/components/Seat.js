@@ -6,6 +6,7 @@ import "../App.css"
 class Seat extends Component {
   constructor(props) {
     super(props);
+    // this.bust = this.bust.bind(this)
     // this.winner = this.winner.bind(this)
   }
   // componentDidUpdate(prevProps, prevState){
@@ -13,7 +14,6 @@ class Seat extends Component {
   //     console.log('this seat is a winner')
   //   }
   // }
-
 
   render() {
     let id = this.props.seat.seat;
@@ -35,8 +35,10 @@ class Seat extends Component {
         this.props.change(this.props.seat.seat, acePosition)
       }
       total = total + "-  BUST!";
-      // this.props.stay()
     }
+    
+
+
     let winner = ''
     if(this.props.seat.win === true){
       winner = "Winner!"
