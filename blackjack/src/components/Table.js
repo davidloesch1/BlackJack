@@ -102,6 +102,7 @@ class Table extends Component {
     this.draw = this.draw.bind(this);
     this.deal = this.deal.bind(this);
     this.hit = this.hit.bind(this);
+    this.stay = this.stay.bind(this);
     this.changeAceValue = this.changeAceValue.bind(this);
   }
   componentDidMount() {
@@ -127,6 +128,8 @@ class Table extends Component {
     let table = this.state.table.slice(0);
     while (deal.length > 0) {
       table.forEach(el => {
+        el.hasGone = false
+        el.turn = false
         if (el.enabled === true) {
           let newDeal = deal.splice(0, 2);
           el.hand = newDeal;
@@ -176,12 +179,15 @@ class Table extends Component {
 
   //the hit function draws a card from the deck using our deck_id and the API fetch call
   hit(e) {
+    console.log(e)
     let url =
       "https://deckofcardsapi.com/api/deck/" +
       this.state.deck_id +
       "/draw/?count=1";
     let index = this.state.table.findIndex(x => x.seat === e);
+    console.log(index)
     let array = this.state.table.slice(0);
+    console.log(array)
     fetch(url)
       .then(res => res.json())
       .then(res => {
@@ -231,6 +237,21 @@ class Table extends Component {
     });
   }
 
+  stay(){
+    let index = this.state.table.findIndex(x => x.hasGone === false);
+    let table = this.state.table.slice(0);
+    console.log(table)
+    console.log(index)
+    table[index].turn = !table[index].turn
+    if(table[index + 1]){
+      table[index + 1].turn = true
+    }
+    table[index].hasGone = !table[index].hasGone
+    this.setState({
+      table: table
+    })
+  }
+
   render() {
     let dealer = this.state.table.slice(0);
     let seats = dealer;
@@ -238,7 +259,7 @@ class Table extends Component {
     seats = seats.map((el, i) => {
       if (el.enabled === true) {
         return (
-          <Seat key={i} seat={el} hit={this.hit} change={this.changeAceValue} />
+          <Seat key={i} seat={el} hit={this.hit} stay={this.stay} change={this.changeAceValue} />
         );
       }
     });

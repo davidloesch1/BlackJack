@@ -12,3 +12,7 @@
     max-width: 300px;
     flex-wrap: wrap;
 }
+
+.turn {
+    border: 5px solid white;
+}

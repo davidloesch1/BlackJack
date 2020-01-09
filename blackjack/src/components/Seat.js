@@ -27,19 +27,18 @@ class Seat extends Component {
         this.props.change(this.props.seat.seat, acePosition)
       }
       total = total + "-  BUST!";
+      // this.props.stay()
     }
-    // if(this.props.seat.turn === true){
 
-    // }
 
     return (
-      <div className="seat-container">
+      <div className={ this.props.seat.turn ? "turn seat-container" : "seat-container" }> 
         <h1>{this.props.seat.seat}</h1>
         <div className="card-row">
           {cards}          
         </div>
-        <button onClick={e => this.props.hit(id, e)}>HIT</button>
-        {/* <button onClick={(e)=> this.stay(e)}>STAY</button> */}
+        <button onClick={() => this.props.hit(id)}>HIT</button>
+        <button onClick={() => this.props.stay()}>STAY</button>
         <h2>Total: {total}</h2>
       </div>
     );
