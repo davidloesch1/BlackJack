@@ -6,7 +6,15 @@ import "../App.css"
 class Seat extends Component {
   constructor(props) {
     super(props);
+    // this.winner = this.winner.bind(this)
   }
+  // componentDidUpdate(prevProps, prevState){
+  //   if(this.props.seat.win !== prevProps.seat.win){
+  //     console.log('this seat is a winner')
+  //   }
+  // }
+
+
   render() {
     let id = this.props.seat.seat;
     let cards;
@@ -29,6 +37,11 @@ class Seat extends Component {
       total = total + "-  BUST!";
       // this.props.stay()
     }
+    let winner = ''
+    if(this.props.seat.win === true){
+      winner = "Winner!"
+    }
+    
 
 
     return (
@@ -38,8 +51,9 @@ class Seat extends Component {
           {cards}          
         </div>
         <button onClick={() => this.props.hit(id)}>HIT</button>
-        <button onClick={() => this.props.stay()}>STAY</button>
+        <button onClick={() => this.props.stay(parseInt(total))}>STAY</button>
         <h2>Total: {total}</h2>
+        <h2>{ winner }</h2>
       </div>
     );
   }

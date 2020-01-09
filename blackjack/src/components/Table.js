@@ -17,7 +17,8 @@ class Table extends Component {
           hand: [],
           total: 0,
           bet: 0,
-          bust: false
+          bust: false,
+          win: false
         },
         {
           seat: "Seat 2",
@@ -27,7 +28,9 @@ class Table extends Component {
           hand: [],
           total: 0,
           bet: 0,
-          bust: false
+          bust: false,
+          win: false
+
         },
         {
           seat: "Seat 3",
@@ -37,7 +40,9 @@ class Table extends Component {
           hand: [],
           total: 0,
           bet: 0,
-          bust: false
+          bust: false,
+          win: false
+
         },
         {
           seat: "Seat 4",
@@ -47,7 +52,9 @@ class Table extends Component {
           hand: [],
           total: 0,
           bet: 0,
-          bust: false
+          bust: false,
+          win: false
+          
         },
         {
           seat: "Seat 5",
@@ -57,7 +64,9 @@ class Table extends Component {
           hand: [],
           total: 0,
           bet: 0,
-          bust: false
+          bust: false,
+          win: false
+
         },
         {
           seat: "Seat 6",
@@ -67,7 +76,9 @@ class Table extends Component {
           hand: [],
           total: 0,
           bet: 0,
-          bust: false
+          bust: false,
+          win: false
+
         },
         {
           seat: "Seat 7",
@@ -77,7 +88,9 @@ class Table extends Component {
           hand: [],
           total: 0,
           bet: 0,
-          bust: false
+          bust: false,
+          win: false
+
         },
         {
           seat: "dealer",
@@ -87,7 +100,8 @@ class Table extends Component {
           hand: [],
           total: 0,
           bet: null,
-          bust: false
+          bust: false,
+          win: false
         }
       ],
       account: props.account,
@@ -105,6 +119,8 @@ class Table extends Component {
     this.hit = this.hit.bind(this);
     this.stay = this.stay.bind(this);
     this.changeAceValue = this.changeAceValue.bind(this);
+    this.newDeal = this.newDeal.bind(this)
+    this.checkWinner = this.checkWinner.bind(this)
     // this.emptySeat = this.emptySeat.bind(this)
   }
   componentDidMount() {
@@ -126,6 +142,17 @@ class Table extends Component {
   //     return false
   //   }
   // }
+
+
+  changeAceValue(seat, ace){
+    let table = this.state.table.slice(0)
+    let index =table.findIndex(el => el.seat === seat)
+    table[index].hand[ace].value = '1'
+    this.setState({
+      table: table
+    })
+  }
+
   componentDidUpdate() {
     if (this.state.deal.length > 0) {
       this.deal();
@@ -135,6 +162,7 @@ class Table extends Component {
     //   this.turn()
     // }
   }
+
   deal() {
     let deal = this.state.deal.slice(0);
     let table = this.state.table.slice(0);
@@ -152,6 +180,7 @@ class Table extends Component {
       deal: deal
     });
   }
+
   draw() {
     let numCards = this.state.playerNum * 2;
     let url =
@@ -189,6 +218,25 @@ class Table extends Component {
       });
   }
 
+  newDeal(){
+
+  }
+
+  checkWinner(){
+    let table = this.state.table.slice(0)
+    let dealerTotal = table[7].total
+    console.log(dealerTotal)
+
+    table.forEach((el, i, table) => {
+      if(i === table.length - 1){
+      }
+      if(el.enabled === true && el.bust === false && el.total > dealerTotal){
+        el.win = true
+      }
+    })
+
+  }
+
   //the hit function draws a card from the deck using our deck_id and the API fetch call
   hit(e) {
     console.log(e)
@@ -224,40 +272,37 @@ class Table extends Component {
       });
   }
 
-  //this changes the values of the Ace from 11 to 1 depending on the total hand count
-  changeAceValue(e, ace) {
-    let table = this.state.table.slice(0);
-    let seatIndex = table.findIndex(seat => seat.seat == e);
-    console.log(seatIndex);
-    table[seatIndex].hand[ace].value = "1";
-    console.log(table);
-    this.setState({
-      table: table
-    });
-  }
-
   turn() {
     let table = this.state.table.slice(0)
     let turn = this.state.turn
-    while(table[turn].enabled === false){
-      turn ++
+    if( turn >= 8){
+      this.checkWinner()
+    } else {
+      while(table[turn].enabled === false){
+        turn ++
+      }
+      table[turn].turn = true
+      this.setState({
+        table: table,
+        turn: turn
+      })      
     }
-    table[turn].turn = true
-    this.setState({
-      table: table,
-      turn: turn
-    })
   }
 
-  stay(){
+  stay(total){
     let table = this.state.table.slice(0)
     let turn = this.state.turn
+    console.log(total)
+    if(total > 21){
+      table[turn].bust = true
+    }
     table[turn].hasGone = true
     table[turn].turn = false
+    table[turn].total = total
     turn ++
     this.setState({
       table: table,
-      turn: turn
+      turn: turn,
     }, () => this.turn())
   }
 
@@ -276,7 +321,7 @@ class Table extends Component {
     return (
       <div className="table">
         <h1>Table</h1>
-        <Dealer dealer={dealer} />
+        <Dealer dealer={dealer} hit={this.hit} change={this.changeAceValue} stay={this.stay} check={this.checkWinner}/>
         <div className="seat-row">{seats}</div>
 
         <button onClick={() => this.draw()}>Deal</button>
