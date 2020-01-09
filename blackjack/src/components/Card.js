@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
+import "./Card.css"
 
 export class Card extends Component {
     render() {
-        return <img src={this.props.img} style={{width: '100px', height: 'auto'}}/>
+        return <img className="card" src={this.props.img} />
     }
 }
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Dealer from "./Dealer";
 import Seat from "./Seat";
-import "../App.css";
+import "./Table.css";
 
 class Table extends Component {
   constructor(props) {
@@ -12,6 +12,8 @@ class Table extends Component {
         {
           seat: "Seat 1",
           enabled: true,
+          hasGone: false,
+          turn: false,
           hand: [],
           total: 0,
           bet: 0,
@@ -20,6 +22,8 @@ class Table extends Component {
         {
           seat: "Seat 2",
           enabled: true,
+          hasGone: false,
+          turn: false,
           hand: [],
           total: 0,
           bet: 0,
@@ -27,7 +31,9 @@ class Table extends Component {
         },
         {
           seat: "Seat 3",
-          enabled: false,
+          enabled: true,
+          hasGone: false,
+          turn: false,
           hand: [],
           total: 0,
           bet: 0,
@@ -35,7 +41,9 @@ class Table extends Component {
         },
         {
           seat: "Seat 4",
-          enabled: true,
+          enabled: false,
+          hasGone: false,
+          turn: false,
           hand: [],
           total: 0,
           bet: 0,
@@ -44,6 +52,8 @@ class Table extends Component {
         {
           seat: "Seat 5",
           enabled: false,
+          hasGone: false,
+          turn: false,
           hand: [],
           total: 0,
           bet: 0,
@@ -52,6 +62,8 @@ class Table extends Component {
         {
           seat: "Seat 6",
           enabled: false,
+          hasGone: false,
+          turn: false,
           hand: [],
           total: 0,
           bet: 0,
@@ -60,6 +72,8 @@ class Table extends Component {
         {
           seat: "Seat 7",
           enabled: false,
+          hasGone: false,
+          turn: false,
           hand: [],
           total: 0,
           bet: 0,
@@ -68,6 +82,8 @@ class Table extends Component {
         {
           seat: "dealer",
           enabled: true,
+          hasGone: false,
+          turn: false,
           hand: [],
           total: 0,
           bet: null,
@@ -75,7 +91,7 @@ class Table extends Component {
         }
       ],
       account: props.account,
-      deck_id: "qgjl7i4n3sky",
+      deck_id: "2dluh7kzi445",
       cardsInPlay: [],
       deal: [],
       playerNum: 0,
@@ -83,10 +99,10 @@ class Table extends Component {
       remaining: 0,
       shuffled: null
     };
-    this.draw = this.draw.bind(this)
-    this.deal = this.deal.bind(this)
-    this.hit = this.hit.bind(this)
-    this.changeAceValue = this.changeAceValue.bind(this)
+    this.draw = this.draw.bind(this);
+    this.deal = this.deal.bind(this);
+    this.hit = this.hit.bind(this);
+    this.changeAceValue = this.changeAceValue.bind(this);
   }
   componentDidMount() {
     let i = 0;
@@ -103,6 +119,7 @@ class Table extends Component {
   componentDidUpdate() {
     if (this.state.deal.length > 0) {
       this.deal();
+      this.turn();
     }
   }
   deal() {
@@ -130,19 +147,18 @@ class Table extends Component {
     fetch(url)
       .then(res => res.json())
       .then(res => {
-          console.log(res)
-          res.cards.forEach(el => {
-              if(el.value === "JACK") {
-                  el.value = "10"
-              }else if(el.value === "QUEEN") {
-                  el.value = "10"
-              }else if(el.value === "KING") {
-                el.value = "10"
-              }else if(el.value === "ACE") {
-                el.value = "11"
-              }
-          })
-          return res
+        res.cards.forEach(el => {
+          if (
+            el.value === "JACK" ||
+            el.value === "QUEEN" ||
+            el.value === "KING"
+          ) {
+            el.value = "10";
+          } else if (el.value === "ACE") {
+            el.value = "11";
+          }
+        });
+        return res;
       })
       .then(res => {
         this.setState(state => {
@@ -158,64 +174,85 @@ class Table extends Component {
       });
   }
 
-
-  hit(e){
+  //the hit function draws a card from the deck using our deck_id and the API fetch call
+  hit(e) {
     let url =
-    "https://deckofcardsapi.com/api/deck/" +
-    this.state.deck_id +
-    "/draw/?count=1"
-    console.log(e)
-    let index = this.state.table.findIndex(x => x.seat === e)
-    let array = this.state.table.slice(0)
+      "https://deckofcardsapi.com/api/deck/" +
+      this.state.deck_id +
+      "/draw/?count=1";
+    let index = this.state.table.findIndex(x => x.seat === e);
+    let array = this.state.table.slice(0);
     fetch(url)
-    .then(res=> res.json())
-    .then(res => {
-        console.log(res)
+      .then(res => res.json())
+      .then(res => {
         res.cards.forEach(el => {
-            if(el.value === "JACK") {
-                el.value = "10"
-            }else if(el.value === "QUEEN") {
-                el.value = "10"
-            }else if(el.value === "KING") {
-              el.value = "10"
-            }else if(el.value === "ACE") {
-              el.value = "11"
-            }
-        })
-        return res
-    })
-    .then(res=> {
+          if (
+            el.value === "JACK" ||
+            el.value === "QUEEN" ||
+            el.value === "KING"
+          ) {
+            el.value = "10";
+          } else if (el.value === "ACE") {
+            el.value = "11";
+          }
+        });
+        return res;
+      })
+      .then(res => {
         this.setState(state => {
-            let table = array[index].hand.push(res.cards[0])
-            return table
-        })
-        
-    })
-    
+          let table = array[index].hand.push(res.cards[0]);
+          return table;
+        });
+      });
   }
 
-  changeAceValue(e){
-    console.log(e)
-}
+  //this changes the values of the Ace from 11 to 1 depending on the total hand count
+  changeAceValue(e, ace) {
+    let table = this.state.table.slice(0);
+    let seatIndex = table.findIndex(seat => seat.seat == e);
+    console.log(seatIndex);
+    table[seatIndex].hand[ace].value = "1";
+    console.log(table);
+    this.setState({
+      table: table
+    });
+  }
+
+  turn() {
+    let table = this.state.table.slice(0);
+    console.log(table);
+    let i = table.findIndex(
+      seat => seat.hasGone === false && seat.enabled === true
+    );
+    console.log(i);
+    table[i].turn = "true";
+    this.setState({
+      table: table
+    });
+  }
+
   render() {
     let dealer = this.state.table.slice(0);
-    let seats = dealer
+    let seats = dealer;
     dealer = dealer.pop();
-    seats = seats.map(el  => {
-        if(el.enabled === true) {
-            return <Seat seat={el} hit={this.hit} change={this.changeAceValue}/>
-        }
-    })
+    seats = seats.map((el, i) => {
+      if (el.enabled === true) {
+        return (
+          <Seat key={i} seat={el} hit={this.hit} change={this.changeAceValue} />
+        );
+      }
+    });
 
     return (
-      <>
+      <div className="table">
         <h1>Table</h1>
         <Dealer dealer={dealer} />
-        { seats }
+        <div className="seat-row">{seats}</div>
+
         <button onClick={() => this.draw()}>Deal</button>
-      </>
+      </div>
     );
   }
 }
 
-export default Table
+export default Table;

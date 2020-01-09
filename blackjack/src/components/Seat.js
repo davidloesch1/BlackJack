@@ -1,15 +1,11 @@
 import React, { Component } from "react";
 import Card from "./Card";
 import "./Seat.css";
+import "../App.css"
 
 class Seat extends Component {
   constructor(props) {
     super(props);
-    this.checkValue = this.checkValue.bind(this);
-  }
-
-  checkValue(card) {
-    return (card.value = "11");
   }
   render() {
     let id = this.props.seat.seat;
@@ -26,20 +22,26 @@ class Seat extends Component {
     });
 
     if (total > 21) {
-      if (this.props.seat.hand.findIndex(this.checkValue) > 0) {
-        console.log("there are aces");
+      let acePosition = this.props.seat.hand.findIndex(card => card.value == "11")
+      if (acePosition > -1) {
+        this.props.change(this.props.seat.seat, acePosition)
       }
       total = total + "-  BUST!";
     }
+    // if(this.props.seat.turn === true){
+
+    // }
 
     return (
-      <>
+      <div className="seat-container">
         <h1>{this.props.seat.seat}</h1>
-        {cards}
+        <div className="card-row">
+          {cards}          
+        </div>
         <button onClick={e => this.props.hit(id, e)}>HIT</button>
         {/* <button onClick={(e)=> this.stay(e)}>STAY</button> */}
         <h2>Total: {total}</h2>
-      </>
+      </div>
     );
   }
 }
