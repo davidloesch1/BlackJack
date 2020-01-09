@@ -11,7 +11,7 @@ class Table extends Component {
       table: [
         {
           seat: "Seat 1",
-          enabled: true,
+          enabled: false,
           hasGone: false,
           turn: false,
           hand: [],
@@ -31,7 +31,7 @@ class Table extends Component {
         },
         {
           seat: "Seat 3",
-          enabled: true,
+          enabled: false,
           hasGone: false,
           turn: false,
           hand: [],
@@ -51,7 +51,7 @@ class Table extends Component {
         },
         {
           seat: "Seat 5",
-          enabled: false,
+          enabled: true,
           hasGone: false,
           turn: false,
           hand: [],
@@ -97,13 +97,15 @@ class Table extends Component {
       playerNum: 0,
       drawnCard: {},
       remaining: 0,
-      shuffled: null
+      shuffled: null,
+      turn: 0
     };
     this.draw = this.draw.bind(this);
     this.deal = this.deal.bind(this);
     this.hit = this.hit.bind(this);
     this.stay = this.stay.bind(this);
     this.changeAceValue = this.changeAceValue.bind(this);
+    // this.emptySeat = this.emptySeat.bind(this)
   }
   componentDidMount() {
     let i = 0;
@@ -116,12 +118,22 @@ class Table extends Component {
       playerNum: i
     });
   }
-
+  // emptySeat(el){
+  //   if(el.enabled === false && el.turn === true){
+  //     return true
+  //   }
+  //   else {
+  //     return false
+  //   }
+  // }
   componentDidUpdate() {
     if (this.state.deal.length > 0) {
       this.deal();
       this.turn();
     }
+    // if (this.state.table.findIndex(el => el.enabled === false && el.turn === true) > -1){
+    //   this.turn()
+    // }
   }
   deal() {
     let deal = this.state.deal.slice(0);
@@ -225,31 +237,28 @@ class Table extends Component {
   }
 
   turn() {
-    let table = this.state.table.slice(0);
-    console.log(table);
-    let i = table.findIndex(
-      seat => seat.hasGone === false && seat.enabled === true
-    );
-    console.log(i);
-    table[i].turn = "true";
+    let table = this.state.table.slice(0)
+    let turn = this.state.turn
+    while(table[turn].enabled === false){
+      turn ++
+    }
+    table[turn].turn = true
     this.setState({
-      table: table
-    });
+      table: table,
+      turn: turn
+    })
   }
 
   stay(){
-    let index = this.state.table.findIndex(x => x.hasGone === false);
-    let table = this.state.table.slice(0);
-    console.log(table)
-    console.log(index)
-    table[index].turn = !table[index].turn
-    if(table[index + 1]){
-      table[index + 1].turn = true
-    }
-    table[index].hasGone = !table[index].hasGone
+    let table = this.state.table.slice(0)
+    let turn = this.state.turn
+    table[turn].hasGone = true
+    table[turn].turn = false
+    turn ++
     this.setState({
-      table: table
-    })
+      table: table,
+      turn: turn
+    }, () => this.turn())
   }
 
   render() {

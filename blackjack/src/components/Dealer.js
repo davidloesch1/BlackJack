@@ -6,6 +6,7 @@ class Dealer extends Component {
   constructor(props) {
     super(props);
     this.reveal = this.reveal.bind(this);
+    // this.dealerLogic = this.dealerLogic.bind(this)
   }
 
   reveal() {
@@ -21,16 +22,29 @@ class Dealer extends Component {
       });
     }
     //this code creates a card component that renders the back of a card
-    let back = <Card img={backImg} />;    
+    let back = <Card img={backImg} />;  
+    let faceDown = {}  
     if(cards){
-        let faceDown = cards.shift()
+        faceDown = cards.shift()
         cards.unshift(back)
+    } 
+    let total = 0   
+      if(this.props.dealer.hand[1]){
+        total = parseInt(this.props.dealer.hand[1].value)
     }
-    console.log(this.props.dealer)
-    let total = 0
-    if(this.props.dealer.hand[1]){
-        total = this.props.dealer.hand[1].value
+    
+    if(this.props.dealer.turn === true){
+        cards.shift()
+        cards.unshift(faceDown)
+        total = 0
+        this.props.dealer.hand.forEach(el => {
+          total = total + parseInt(el.value);
+        });
+
     }
+    // console.log(this.props.dealer)
+
+  
     if (total > 21) {
       let acePosition = this.props.dealer.hand.findIndex(card => card.value == "11")
       if (acePosition > -1) {
@@ -42,10 +56,12 @@ class Dealer extends Component {
     return (
       <>
         <h1>{this.props.dealer.seat}</h1>
-        <div className="card-row">
-            {cards}            
+        <div className={ this.props.dealer.turn ? "turn dealer-container" : "dealer-container" }>
+            <div className="card-row">
+              {cards}                
+            </div>
+          <h2>Total: {total}</h2>
         </div>
-        <h2>Total: { total }</h2>
 
       </>
     );

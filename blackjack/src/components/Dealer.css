@@ -2,10 +2,17 @@
     border: 1px solid black;
     width: 300px;
     height: 300px;
+    margin: 10px;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 .card-row {
     display: flex;
-    flex-direction: row;
+    max-width: 300px;
+    flex-wrap: wrap;
+}
+
+.turn {
+    border: 5px solid white;
 }
