@@ -43,7 +43,7 @@ The api I'm using only deals with decks of cards, the ability to shuffle, and ke
 - This will be updated when bugs are worked out and the account feature is introduced.
 
 ## Components
-##### Writing out your components and its descriptions isn't a required part of the proposal but can be helpful.
+
 | Component | Description | 
 | --- | :---: |  
 | App | This will make initial data pull and be the core source of data | 
