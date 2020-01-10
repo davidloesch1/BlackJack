@@ -1,4 +1,51 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Project Overview
+Project Description
+simple blackjack game following the rules of casino style play for single and eventually mulitple players at once. Eventually adding on account features for tracking accounts once we introduce database components.
+
+Project Links
+https://github.com/davidloesch1/BlackJack
+Wireframes
+Upload images of wireframe to cloudinary and add the link here with a description of the specific wireframe.
+
+https://www.lucidchart.com/invitations/accept/e50fcce9-f30b-418f-9c9e-bb2a8c29440c
+https://www.lucidchart.com/invitations/accept/9094ff81-a184-42a0-8845-836188525bb0
+App will house all other components, there will be a table component for the actual game board, as well as an account component that will house all information related to the account, such as balance and win stats. Each will also house a number of other smaller compoenents like "Card" and "Dealer"
+
+MVP/PostMVP - 5min
+MVP - of this project will be to have 1 deck, 1 player, and a dealer that you will be able to play a single hand of blackjack per turn and go throught the entire deck, then be able to reshuffle the deck and continue play.
+
+Post MVP - will be a full casinon style play for single player (multiplayer eventually). using typical casino house rules, a player will be able to play up to 7 seats on their own, with each seat producing a seperate hand and betting amount. The player will have some setting options such as "apply bet to all seats" or "change betting amout each deal"
+
+My focus for this project will be UI/UX and functionality. I want this game to be fun to play without any extra features that may hinder gameplay.
+
+MVP EXAMPLE
+Find and use external api - deckofcardsapi.com
+https://deckofcardsapi.com/api/deck/bilfs0xe2sxh/draw/?count=1
+http://comfortable-stem.surge.sh/
+The api I'm using only deals with decks of cards, the ability to shuffle, and keeping track of any cards drawn. Using this, I'll use state to manipulate the data and create game logic to offer players.
+
+PostMVP EXAMPLE
+Add localStorage or firebase for storage
+Components
+Writing out your components and its descriptions isn't a required part of the proposal but can be helpful.
+Component	Description
+App	This will make initial data pull and be the core source of data
+Account	This will hold account information
+Table	This will house all components related to gameplay
+Time Frames
+Component	Priority	Estimated Time	Time Invetsted	Actual Time
+Adding Form	H	6hrs	-	-
+Working with API	H	6hrs	3	-
+Building components	H	20hrs	6	-
+CSS	M	6hrs	-	-
+Game Logic	H	8hrs	3	-
+Testing	H	8hrs	2	-
+Total	H	54hrs	-	-
+Code Snippet
+To Be Determined
+Issues and Resolutions
+TBD
 
 ## Available Scripts
 
