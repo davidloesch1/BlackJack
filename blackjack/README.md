@@ -39,6 +39,7 @@ Adding Form	H	6hrs	-	-
 Working with API	H	6hrs	3	-
 Building components	H	20hrs	6	-
 CSS	M	6hrs	-	-
+
 Game Logic	H	8hrs	3	-
 Testing	H	8hrs	2	-
 Total	H	54hrs	-	-
