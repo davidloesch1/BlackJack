@@ -61,10 +61,9 @@ class Dealer extends Component {
     //if there is more than one Ace, then it only changes the necessary amount of Aces to make the 
     //score less than 21.
     if(total === 21){
-      console.log("dealer wins")
     }
     if (total > 21) {
-      let acePosition = this.props.dealer.hand.findIndex(card => card.value == "11")
+      let acePosition = this.props.dealer.hand.findIndex(card => card.value === "11")
       if (acePosition > -1) {
         this.props.change(this.props.dealer.seat, acePosition)
       }

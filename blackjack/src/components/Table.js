@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Dealer from "./Dealer";
 import Seat from "./Seat";
+import Info from './Info'
 import "./Table.css";
 
 class Table extends Component {
@@ -9,6 +10,7 @@ class Table extends Component {
     this.state = {
     }
   }
+
   render() {
     let dealer = this.props.table.slice(0);
     let seats = dealer;
@@ -24,6 +26,7 @@ class Table extends Component {
     return (
       <div className="table">
         <h1>Table</h1>
+        <Info {...this.props} />
         <Dealer dealer={dealer} hit={this.props.hit} change={this.props.change} stay={this.props.stay} check={this.props.check}/>
         <div className="seat-row">{seats}</div>
 

@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import Table from "./components/Table";
 import Account from "./components/Account";
 import Header from "./components/Header";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Footer from "./components/Footer"
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 
 class App extends Component {
@@ -25,7 +26,7 @@ class App extends Component {
         },
         {
           seat: "Seat 2",
-          enabled: true,
+          enabled: false,
           hasGone: false,
           turn: false,
           hand: [],
@@ -58,7 +59,7 @@ class App extends Component {
         },
         {
           seat: "Seat 5",
-          enabled: true,
+          enabled: false,
           hasGone: false,
           turn: false,
           hand: [],
@@ -117,9 +118,11 @@ class App extends Component {
     this.changeAceValue = this.changeAceValue.bind(this);
     this.newDeal = this.newDeal.bind(this);
     this.checkWinner = this.checkWinner.bind(this);
-    // this.emptySeat = this.emptySeat.bind(this)
+    this.seats = this.seats.bind(this)
+    this.countplayers = this.countPlayers.bind(this)
+    this.resetSeats = this.resetSeats.bind(this)
   }
-  componentDidMount() {
+  countPlayers() {
     let i = 0;
     this.state.table.forEach(el => {
       if (el.enabled === true) {
@@ -140,10 +143,13 @@ class App extends Component {
     });
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     if (this.state.deal.length > 0) {
       this.deal();
       this.turn();
+    }
+    if(this.state.table !== prevState.table){
+      this.countPlayers()
     }
   }
 
@@ -167,6 +173,18 @@ class App extends Component {
 
   draw() {
     let numCards = this.state.playerNum * 2;
+    let table = this.state.table.slice(0)
+    table.forEach(el => {
+     el = {
+        hasGone: false,
+        turn: false,
+        hand: [],
+        total: 0,
+        bet: 0,
+        bust: false,
+        win: false,
+      }
+    })
     let url =
       "https://deckofcardsapi.com/api/deck/" +
       this.state.deck_id +
@@ -190,10 +208,12 @@ class App extends Component {
       })
       .then(res => {
         this.setState(state => {
+          let turn = 0
           let deal = res.cards;
           let remaining = res.remaining;
           let cardsInPlay = state.cardsInPlay.concat(res.cards);
           return {
+            turn,
             deal,
             remaining,
             cardsInPlay
@@ -201,13 +221,24 @@ class App extends Component {
         });
       });
   }
+  resetSeats(){
+
+  }
+  seats(e){
+    let id = e.target.name
+    let table = this.state.table.slice(0)
+    let index = table.findIndex(el => el.seat === id)
+    table[index].enabled = !table[index].enabled
+    this.setState({
+      table: table
+    })
+  }
 
   newDeal() {}
 
   checkWinner() {
     let table = this.state.table.slice(0);
     let dealerTotal = table[7].total;
-    console.log(dealerTotal);
 
     table.forEach((el, i, table) => {
       if (i === table.length - 1) {
@@ -220,15 +251,12 @@ class App extends Component {
 
   //the hit function draws a card from the deck using our deck_id and the API fetch call
   hit(e) {
-    console.log(e);
     let url =
       "https://deckofcardsapi.com/api/deck/" +
       this.state.deck_id +
       "/draw/?count=1";
     let index = this.state.table.findIndex(x => x.seat === e);
-    console.log(index);
     let array = this.state.table.slice(0);
-    console.log(array);
     fetch(url)
       .then(res => res.json())
       .then(res => {
@@ -273,7 +301,6 @@ class App extends Component {
   stay(total) {
     let table = this.state.table.slice(0);
     let turn = this.state.turn;
-    console.log(total);
     if (total > 21) {
       table[turn].bust = true;
     }
@@ -293,19 +320,7 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/table">Table</Link>
-              </li>
-            </ul>
-          </nav>
-
-          {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+          <Header />
           <Switch>
             <Route path="/table">
               <Table
@@ -317,9 +332,10 @@ class App extends Component {
               />
             </Route>
             <Route exact path="/">
-              <Account account={this.state.account} />
+              <Account account={this.state.account} seat={this.seats} reset={this.resetSeats}/>
             </Route>
           </Switch>
+          <Footer />
         </div>
       </Router>
     );

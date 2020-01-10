@@ -1,6 +1,6 @@
 .seat-container {
     border: 1px solid black;
-    width: 300px;
+    min-width: 300px;
     height: 300px;
     margin: 10px;
     display: flex;
@@ -15,4 +15,7 @@
 
 .turn {
     border: 5px solid white;
+}
+.btn-container {
+    display: flex;
 }

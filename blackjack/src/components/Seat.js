@@ -4,16 +4,6 @@ import "./Seat.css";
 import "../App.css"
 
 class Seat extends Component {
-  constructor(props) {
-    super(props);
-    // this.bust = this.bust.bind(this)
-    // this.winner = this.winner.bind(this)
-  }
-  // componentDidUpdate(prevProps, prevState){
-  //   if(this.props.seat.win !== prevProps.seat.win){
-  //     console.log('this seat is a winner')
-  //   }
-  // }
 
   render() {
     let id = this.props.seat.seat;
@@ -30,7 +20,7 @@ class Seat extends Component {
     });
 
     if (total > 21) {
-      let acePosition = this.props.seat.hand.findIndex(card => card.value == "11")
+      let acePosition = this.props.seat.hand.findIndex(card => card.value === "11")
       if (acePosition > -1) {
         this.props.change(this.props.seat.seat, acePosition)
       }
@@ -52,8 +42,10 @@ class Seat extends Component {
         <div className="card-row">
           {cards}          
         </div>
-        <button onClick={() => this.props.hit(id)}>HIT</button>
-        <button onClick={() => this.props.stay(parseInt(total))}>STAY</button>
+        <div className="btn-container">
+          <button onClick={() => this.props.hit(id)}>HIT</button>
+          <button onClick={() => this.props.stay(parseInt(total))}>STAY</button>
+        </div>
         <h2>Total: {total}</h2>
         <h2>{ winner }</h2>
       </div>

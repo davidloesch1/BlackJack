@@ -1,31 +1,22 @@
-import React, { Component } from 'react'
+import React from 'react'
 import './Header.css'
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
+    NavLink,
   } from "react-router-dom";
 
-class Header extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }        
-    }
-
-    render(){
-        return(
-            <>
-            <Router>
-                <Link to='/'>Home</Link>
-                <Link to='/table'>Table</Link>                
-            </Router>
-            </>
-        )
-    }
-
+function Header() {
+    return(
+        <div className="header-container">
+            <nav className="header-nav">
+                <NavLink exact activeClassName='active' to="/">
+                    Account
+                </NavLink>
+                <NavLink activeClassName='active' to="/table">
+                    Table
+                </NavLink>
+            </nav>            
+        </div>
+    )
 }
 
 export default Header

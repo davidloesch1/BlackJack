@@ -1,0 +1,11 @@
+.footer-container {
+    background-color: green;
+    height: 10vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h4 {
+    margin-top: 0px;
+}
