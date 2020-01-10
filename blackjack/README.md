@@ -8,8 +8,10 @@ This is meant to be a simple blackjack game following the rules of casino style 
 ## Project Links
 
 - [https://github.com/davidloesch1/BlackJack]()
-Working Demo: 
+- Working Demo: 
 http://venomous-rod.surge.sh
+- Video Demo:
+https://youtu.be/r2S3b-8W1aU
 
 
 ## Wireframes
