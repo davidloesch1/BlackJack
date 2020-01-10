@@ -1,116 +1,113 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-Project Overview
-Project Description
-simple blackjack game following the rules of casino style play for single and eventually mulitple players at once. Eventually adding on account features for tracking accounts once we introduce database components.
+# Project Overview
 
-Project Links
-https://github.com/davidloesch1/BlackJack
-Wireframes
-Upload images of wireframe to cloudinary and add the link here with a description of the specific wireframe.
 
-https://www.lucidchart.com/invitations/accept/e50fcce9-f30b-418f-9c9e-bb2a8c29440c
-https://www.lucidchart.com/invitations/accept/9094ff81-a184-42a0-8845-836188525bb0
-App will house all other components, there will be a table component for the actual game board, as well as an account component that will house all information related to the account, such as balance and win stats. Each will also house a number of other smaller compoenents like "Card" and "Dealer"
+## Project Description
 
-MVP/PostMVP - 5min
-MVP - of this project will be to have 1 deck, 1 player, and a dealer that you will be able to play a single hand of blackjack per turn and go throught the entire deck, then be able to reshuffle the deck and continue play.
+This is meant to be a simple blackjack game following the rules of casino style play for single and eventually mulitple players at once.  Eventually adding on account features for tracking accounts once we introduce database components.  There is currently a list of bugs that need to be addressed in order for the game to really be fully functional as well as styling components to make the UI/UX more appealing.
 
-Post MVP - will be a full casinon style play for single player (multiplayer eventually). using typical casino house rules, a player will be able to play up to 7 seats on their own, with each seat producing a seperate hand and betting amount. The player will have some setting options such as "apply bet to all seats" or "change betting amout each deal"
+## Project Links
 
-My focus for this project will be UI/UX and functionality. I want this game to be fun to play without any extra features that may hinder gameplay.
+- [https://github.com/davidloesch1/BlackJack]()
+Working Demo: 
+http://venomous-rod.surge.sh/table
 
-MVP EXAMPLE
-Find and use external api - deckofcardsapi.com
-https://deckofcardsapi.com/api/deck/bilfs0xe2sxh/draw/?count=1
+
+## Wireframes
+
+The below are links to my wireframes, which were done on LucidCharts as well as using an app called Wireflow for the layouts.  Originally the layouts were designed for the phone, but the buildout was made for desktop with the idea that it would eventually be made for moble devices once the bugs are worked out.
+
+- [https://www.lucidchart.com/invitations/accept/e50fcce9-f30b-418f-9c9e-bb2a8c29440c]()
+- [https://www.lucidchart.com/invitations/accept/9094ff81-a184-42a0-8845-836188525bb0]()
+
+App will house all other components, there will be a table component for the actual game board, as well as an account component that will house all information related to the account, such as balance and win stats.  Each will also house a number of other smaller compoenents like "Card" and "Dealer"
+
+### MVP/PostMVP - 5min
+
+MVP -  of this project will be to have 1 deck, 1 player, and a dealer that you will be able to play a single hand of blackjack per turn and go throught the entire deck, then be able to reshuffle the deck and continue play.
+
+Post MVP - will be a full casinon style play for single player (multiplayer eventually).  using typical casino house rules, a player will be able to play up to 7 seats on their own, with each seat producing a seperate hand and betting amount.  The player will have some setting options such as "apply bet to all seats" or "change betting amout each deal"
+
+My focus for this project will be UI/UX and functionality.  I want this game to be fun to play without any extra features that may hinder gameplay.
+
+#### MVP EXAMPLE
+
+- Find and use external api - deckofcardsapi.com 
+- https://deckofcardsapi.com/api/deck/bilfs0xe2sxh/draw/?count=1
+- Proof of API rendering: 
 http://comfortable-stem.surge.sh/
-The api I'm using only deals with decks of cards, the ability to shuffle, and keeping track of any cards drawn. Using this, I'll use state to manipulate the data and create game logic to offer players.
 
-PostMVP EXAMPLE
-Add localStorage or firebase for storage
-Components
-Writing out your components and its descriptions isn't a required part of the proposal but can be helpful.
-Component	Description
-App	This will make initial data pull and be the core source of data
-Account	This will hold account information
-Table	This will house all components related to gameplay
-Time Frames
-Component	Priority	Estimated Time	Time Invetsted	Actual Time
-Adding Form	H	6hrs	-	-
-Working with API	H	6hrs	3	-
-Building components	H	20hrs	6	-
-CSS	M	6hrs	-	-
+The api I'm using only deals with decks of cards, the ability to shuffle, and keeping track of any cards drawn.  Using this, I'll use state to manipulate the data and create game logic to offer players.
 
-Game Logic	H	8hrs	3	-
-Testing	H	8hrs	2	-
-Total	H	54hrs	-	-
-Code Snippet
-To Be Determined
-Issues and Resolutions
-TBD
+#### PostMVP EXAMPLE
 
-## Available Scripts
+- This will be updated when bugs are worked out and the account feature is introduced.
 
-In the project directory, you can run:
+## Components
+##### Writing out your components and its descriptions isn't a required part of the proposal but can be helpful.
+| Component | Description | 
+| --- | :---: |  
+| App | This will make initial data pull and be the core source of data | 
+| Account | This will hold account information | 
+| Table | This will house all components related to gameplay | 
 
-### `yarn start`
+## Time Frames
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+| Component | Priority | Estimated Time | Time Invetsted | Actual Time |
+| --- | :---: |  :---: | :---: | :---: |
+| Adding Form | H | 6hrs| 2hrs | - |
+| Working with API | H | 6hrs| 3hrs | - |
+| Building components | H | 20hrs | 18hrs | - |
+| CSS | M | 6hrs | 1hr | - |
+| Game Logic | H | 8hrs | 8hrs | - |
+| Testing | H | 8hrs | 5hrs | - |
+| Total | H | 54hrs| 37hrs | - |
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Code Snippet
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+  //the hit function draws a card from the deck using our deck_id and the API fetch call
+  hit(e) {
+    let url =
+      "https://deckofcardsapi.com/api/deck/" +
+      this.state.deck_id +
+      "/draw/?count=1";
+    let index = this.state.table.findIndex(x => x.seat === e);
+    let array = this.state.table.slice(0);
+    fetch(url)
+      .then(res => res.json())
+      .then(res => {
+        res.cards.forEach(el => {
+          if (
+            el.value === "JACK" ||
+            el.value === "QUEEN" ||
+            el.value === "KING"
+          ) {
+            el.value = "10";
+          } else if (el.value === "ACE") {
+            el.value = "11";
+          }
+        });
+        return res;
+      })
+      .then(res => {
+        this.setState(state => {
+          let table = array[index].hand.push(res.cards[0]);
+          return table;
+        });
+      });
+  }
+```
 
-### `yarn build`
+## Issues and Resolutions
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+There are a number of issues, here are some known bugs so far:
+- dealer logic only works under certain conditions,  I believe its a timing issue
+- seat containers don't house the cards if there are more that 3-4, css and html issue
+- if a player busts, it doesn't move to the next player automatically
+- trouble reseting the table when a turn is over
+- account feature is not set up
+- betting feature is not set up
+- doubling feature is not set up
+- splitting feature is not set up
+- many many many more!!!
