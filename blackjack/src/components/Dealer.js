@@ -9,9 +9,7 @@ class Dealer extends Component {
     // this.dealerLogic = this.dealerLogic.bind(this)
   }
 
-  reveal() {
-
-  }
+  reveal() {}
   render() {
     //this creates a variable for the back of a card image and also creates the Card components
     //for the dealer
@@ -24,48 +22,49 @@ class Dealer extends Component {
       });
     }
 
-    //this code creates a card component that renders the back of a card and replaces the first 
+    //this code creates a card component that renders the back of a card and replaces the first
     //dealer card with a back image.
-    let back = <Card img={backImg} />;  
-    let faceDown = {}  
-    if(cards){
-        faceDown = cards.shift()
-        cards.unshift(back)
-    } 
+    let back = <Card img={backImg} />;
+    let faceDown = {};
+    if (cards) {
+      faceDown = cards.shift();
+      cards.unshift(back);
+    }
 
     // this sets the total to equal the one face up card
-    let total = 0   
-      if(this.props.dealer.hand[1]){
-        total = parseInt(this.props.dealer.hand[1].value)
+    let total = 0;
+    if (this.props.dealer.hand[1]) {
+      total = parseInt(this.props.dealer.hand[1].value);
     }
-    
+
     //this updates the total to include the flipped card
-    if(this.props.dealer.turn === true || this.props.dealer.hasGone === true){
-        cards.shift()
-        cards.unshift(faceDown)
-        total = 0
-        this.props.dealer.hand.forEach(el => {
-          total = total + parseInt(el.value);
-        });
-
+    if (this.props.dealer.turn === true || this.props.dealer.hasGone === true) {
+      cards.shift();
+      cards.unshift(faceDown);
+      total = 0;
+      this.props.dealer.hand.forEach(el => {
+        total = total + parseInt(el.value);
+      });
     }
 
-    let id = this.props.dealer.seat
-    if(this.props.dealer.turn === true && total < 17){
-      this.props.hit(id)
+    let id = this.props.dealer.seat;
+    if (this.props.dealer.turn === true && total < 17) {
+      this.props.hit(id);
     }
-    if(this.props.dealer.turn === true && total >= 17 && total <= 21){
-      this.props.stay(total)
+    if (this.props.dealer.turn === true && total >= 17 && total <= 21) {
+      this.props.stay(total);
     }
-    //this logic changes the value of the Ace card, if there is one, to equal 1 instead of 11.  
-    //if there is more than one Ace, then it only changes the necessary amount of Aces to make the 
+    //this logic changes the value of the Ace card, if there is one, to equal 1 instead of 11.
+    //if there is more than one Ace, then it only changes the necessary amount of Aces to make the
     //score less than 21.
-    if(total === 21){
+    if (total === 21) {
     }
     if (total > 21) {
-      let acePosition = this.props.dealer.hand.findIndex(card => card.value === "11")
+      let acePosition = this.props.dealer.hand.findIndex(
+        card => card.value === "11"
+      );
       if (acePosition > -1) {
-        this.props.change(this.props.dealer.seat, acePosition)
+        this.props.change(this.props.dealer.seat, acePosition);
       }
       total = total + "-  BUST!";
     }
@@ -73,13 +72,16 @@ class Dealer extends Component {
     return (
       <>
         <h1>{this.props.dealer.seat}</h1>
-        <div className={ this.props.dealer.turn ? "turn dealer-container" : "dealer-container" }>
-            <div className="card-row">
-              {cards}                
-            </div>
+        <div
+          className={
+            this.props.dealer.turn
+              ? "turn dealer-container"
+              : "dealer-container"
+          }
+        >
+          <div className="card-row">{cards}</div>
           <h2>Total: {total}</h2>
         </div>
-
       </>
     );
   }

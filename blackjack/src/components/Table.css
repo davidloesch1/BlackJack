@@ -1,11 +1,12 @@
 .table {
-    background-color: green;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  background-color: green;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80vh;
 }
 
 .seat-row {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
